@@ -1,0 +1,20 @@
+FROM ubuntu
+RUN apt-get update -y && apt-get install -y wget unzip openjdk-8-jdk
+
+RUN mkdir -p /opt/project
+WORKDIR /opt/project
+
+RUN wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.89/bin/apache-tomcat-8.5.89.zip \
+    && unzip apache-tomcat-8.5.89.zip \
+    && mv apache-tomcat-8.5.89 tomcat
+
+RUN wget https://github.com/shubhamborkar25/StudentProject/raw/main/student.war \
+    && mv student.war tomcat/webapps/
+
+WORKDIR /opt/project/tomcat/bin
+
+RUN chmod +x catalina.sh
+
+EXPOSE 8080
+
+CMD ["/opt/project/tomcat/bin/catalina.sh", "run"] 
